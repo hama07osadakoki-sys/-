@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://script.google.com https://script.googleusercontent.com;">
+<title>葬儀社 会員制度比較</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.44.0/iconfont/tabler-icons.min.css">
+<style>
+  :root{
+    --bg-page:#f0f4ee;
+    --bg-card:#f9fbf7;
+    --bg-secondary:#e8efe4;
+    --text-primary:#2d3d2a;
+    --text-secondary:#5a7055;
+    --text-tertiary:#8aa485;
+    --border:#c8dbc2;
+    --accent:#4a7c59;
+    --accent-light:#d4e8d0;
+    --green-bg:#d6eccc; --green-text:#2d5a1e;
+    --blue-bg:#dceee8; --blue-text:#1e5a48;
+    --amber-bg:#f5ead0; --amber-text:#7a5a1e;
+    --radius-md:10px;
+    --radius-lg:18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:0;
+    background:var(--bg-page);
+    background-image:radial-gradient(circle at 1px 1px,rgba(74,124,89,0.07) 1px,transparent 0);
+    background-size:22px 22px;
+    font-family:"Zen Maru Gothic",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+    color:var(--text-primary);
+  }
+  .page{max-width:1200px;margin:0 auto;padding:3rem 1.25rem 2.5rem}
+  .header-mark{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1.25rem}
+  .header-mark .line{height:1px;width:36px;background:var(--accent)}
+  .header-mark i{font-size:20px;color:var(--accent)}
+  h1{font-family:"Noto Serif JP",serif;font-size:30px;font-weight:600;margin:0 0 10px;text-align:center;letter-spacing:0.03em}
+  .subtitle{font-size:16px;color:var(--text-secondary);margin:0 0 2rem;text-align:center;line-height:1.8}
+  .toolbar{display:flex;gap:10px;margin-bottom:1.25rem;flex-wrap:wrap;background:var(--bg-card);padding:10px;border-radius:var(--radius-lg);border:1px solid var(--border)}
+  .toolbar input,.toolbar select{height:44px;border:1px solid var(--border);border-radius:var(--radius-md);padding:0 14px;font-size:16px;background:#fff;color:var(--text-primary);font-family:inherit}
+  .toolbar input{flex:1;min-width:160px}
+  .toolbar input:focus,.toolbar select:focus{outline:none;border-color:var(--accent)}
+  .toolbar select{width:auto}
+  .count{
+    margin:0 0 14px 0;
+    background:var(--bg-secondary);border-radius:var(--radius-md);
+    padding:12px 14px;
+  }
+  .count-header{
+    font-size:14px;color:var(--text-secondary);margin-bottom:8px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .count-header strong{color:var(--accent);font-size:18px;font-weight:700}
+  .count-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .count-tag{
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:999px;padding:4px 12px;font-size:13px;
+    color:var(--text-primary);white-space:nowrap;
+    cursor:pointer;transition:all 0.15s;
+  }
+  .count-tag:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .count-empty{font-size:14px;color:var(--text-secondary)}
+  @keyframes highlightPulse{
+    0%{box-shadow:0 0 0 0 rgba(74,124,89,0.5)}
+    70%{box-shadow:0 0 0 10px rgba(74,124,89,0)}
+    100%{box-shadow:0 0 0 0 rgba(74,124,89,0)}
+  }
+  .card.jump-highlight{
+    animation:highlightPulse 1s ease-out 2;
+    border-color:var(--accent);
+  }
+
+  /* 比較バー */
+  .compare-bar{
+    position:sticky;top:0;z-index:100;
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:var(--radius-lg);padding:12px 16px;
+    margin-bottom:16px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    box-shadow:0 2px 12px rgba(120,90,60,0.1);
+    display:none;
+  }
+  .compare-bar.show{display:flex}
+  .compare-bar-left{font-size:14px;color:var(--text-secondary);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .compare-chip{
+    display:inline-flex;align-items:center;gap:5px;
+    background:var(--accent-light);color:var(--accent);
+    font-size:13px;font-weight:500;padding:4px 10px;border-radius:999px;
+    border:1px solid var(--border);
+  }
+  .compare-chip button{
+    background:var(--accent);border:none;cursor:pointer;color:#fff;
+    font-size:11px;padding:0;line-height:1;display:flex;align-items:center;
+    justify-content:center;width:16px;height:16px;border-radius:50%;
+    flex-shrink:0;
+  }
+  .compare-chip button:hover{opacity:0.8}
+  .compare-btn{
+    background:var(--accent);color:#fff;border:none;
+    border-radius:var(--radius-md);padding:10px 20px;
+    font-size:15px;font-weight:700;cursor:pointer;
+    font-family:inherit;white-space:nowrap;
+  }
+  .compare-btn:hover{opacity:0.9}
+  .clear-btn{
+    background:none;color:var(--text-secondary);
+    border:1px solid var(--border);border-radius:var(--radius-md);
+    padding:10px 16px;font-size:14px;cursor:pointer;
+    font-family:inherit;white-space:nowrap;
+  }
+  .clear-btn:hover{background:var(--bg-secondary);color:var(--text-primary)}
+
+  /* カード */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:1fr;gap:14px;align-items:stretch}
+  .card{
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:var(--radius-lg);padding:1.25rem 1.5rem;
+    box-shadow:0 2px 10px rgba(120,90,60,0.06);
+    transition:border-color 0.2s,box-shadow 0.2s;
+    display:flex;flex-direction:column;height:100%;
+  }
+  .card.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-light),0 2px 10px rgba(120,90,60,0.1)}
+  .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .name-row{display:flex;align-items:center;gap:12px}
+  .icon-circle{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid #fff;box-shadow:0 0 0 1px var(--border)}
+  .company{font-weight:700;font-size:20px;margin:0}
+  .note{font-size:14px;color:var(--text-secondary);margin:3px 0 0}
+  /* チェックボックス */
+  .check-wrap{display:flex;align-items:center;gap:6px;flex-shrink:0}
+  .check-wrap input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+  .check-wrap label{font-size:14px;color:var(--text-secondary);cursor:pointer;white-space:nowrap}
+  .badge{display:inline-block;font-size:14px;padding:5px 13px;border-radius:999px;font-weight:500;white-space:nowrap}
+  .badge-free{background:var(--green-bg);color:var(--green-text)}
+  .badge-paid{background:var(--blue-bg);color:var(--blue-text)}
+  .badge-gojo{background:var(--amber-bg);color:var(--amber-text)}
+  .grid-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+  .stat{background:var(--bg-secondary);border-radius:var(--radius-md);padding:10px 12px}
+  .stat-label{font-size:13px;color:var(--text-secondary);display:block;margin-bottom:3px}
+  .stat-value{font-size:17px;font-weight:500}
+  .benefits{font-size:16px;line-height:1.85;border-top:1px dashed var(--border);padding-top:12px;display:flex;flex-direction:column;flex:1}
+  .benefits-label{font-size:14px;color:var(--accent);display:flex;align-items:center;gap:4px;margin-bottom:6px;font-weight:500}
+  .area-row{font-size:15px;color:var(--text-secondary);margin-bottom:12px;display:flex;align-items:center;gap:5px}
+  .site-link{margin-top:10px;font-size:14px;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:5px;font-weight:500;border:1px solid var(--accent-light);background:var(--accent-light);padding:7px 16px;border-radius:999px;align-self:flex-start}
+  .benefits-list{margin:0 0 10px 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;flex:1}
+  .benefits-list li{display:flex;align-items:flex-start;gap:8px;font-size:16px;line-height:1.6}
+  .benefits-list li::before{content:"✓";color:var(--accent);font-weight:700;flex-shrink:0;margin-top:1px}
+
+  /* 比較モーダル */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(62,52,42,0.45);z-index:200;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+  .modal-overlay.show{display:flex}
+  .modal{background:var(--bg-card);border-radius:var(--radius-lg);max-width:100%;width:100%;padding:1.5rem;position:relative;margin:auto}
+  .modal-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-secondary);line-height:1}
+  .modal h2{font-family:"Noto Serif JP",serif;font-size:20px;margin:0 0 1.25rem;color:var(--text-primary)}
+  .compare-table{width:100%;border-collapse:collapse;font-size:14px;min-width:400px}
+  .compare-table th{background:var(--bg-secondary);padding:12px 14px;text-align:left;font-size:13px;font-weight:700;color:var(--text-primary);border:1px solid var(--border);white-space:nowrap}
+  .compare-table td{padding:12px 14px;border:1px solid var(--border);vertical-align:top;line-height:1.7}
+  .compare-table tbody tr:nth-child(even) td{background:#f0f6ee}
+  .compare-table tbody tr:hover td{background:var(--accent-light)}
+  .compare-table td:first-child{font-weight:600;color:var(--text-secondary);font-size:13px;white-space:nowrap;background:var(--bg-secondary);min-width:90px}
+  .compare-table tbody tr:nth-child(even) td:first-child{background:#deebd8}
+  .compare-table tbody tr:hover td:first-child{background:var(--accent-light)}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-md)}
+  footer{font-size:12px;color:var(--text-tertiary);margin-top:2rem;line-height:1.8;text-align:center;padding-top:1.5rem;border-top:1px solid var(--border)}
+  /* エリアボタン */
+  .area-filter{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+  .area-group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .area-group-label{
+    font-size:15px;font-weight:700;color:var(--text-primary);white-space:nowrap;
+    min-width:fit-content;
+  }
+  .area-btn{
+    background:var(--bg-card);border:1px solid var(--border);
+    border-radius:999px;padding:7px 16px;font-size:14px;
+    cursor:pointer;font-family:inherit;color:var(--text-secondary);
+    transition:all 0.15s;
+  }
+  .area-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .area-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:500}
+  @media(max-width:900px){.cards{grid-template-columns:1fr}}
+  @media(max-width:480px){.grid-row{grid-template-columns:1fr 1fr}}
+  @media(max-width:600px){
+    .page{padding:2rem 1rem}
+    h1{font-size:24px}
+    .subtitle{font-size:15px;margin-bottom:1.5rem}
+    .toolbar{flex-direction:column}
+    .toolbar select{width:100%}
+    .card{padding:1rem 1.1rem}
+    .grid-row{grid-template-columns:1fr 1fr;gap:8px}
+    .stat{padding:8px 10px}
+    .company{font-size:16px}
+    .benefits{font-size:14px}
+  }
+  @media(max-width:360px){.grid-row{grid-template-columns:1fr}}
+
+  /* 上に戻るボタン */
+  .scroll-top-btn{
+    position:fixed;bottom:24px;right:24px;z-index:150;
+    width:48px;height:48px;border-radius:50%;
+    background:var(--accent);color:#fff;border:none;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    opacity:0;visibility:hidden;transform:translateY(10px);
+    transition:opacity 0.2s,visibility 0.2s,transform 0.2s;
+  }
+  .scroll-top-btn.show{opacity:1;visibility:visible;transform:translateY(0)}
+  .scroll-top-btn:hover{opacity:0.85}
+  @media(max-width:600px){
+    .scroll-top-btn{width:44px;height:44px;bottom:16px;right:16px}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header-mark"><span class="line"></span><i class="ti ti-flower" aria-hidden="true"></i><span class="line"></span></div>
+  <h1>葬儀社 会員制度比較</h1>
+  <p class="subtitle">大切な方とのお別れに、後悔のない選択を。<br>静岡県の葬儀社10社の会員制度をまとめました。</p>
+
+  <div class="toolbar">
+    <input type="text" id="searchInput" placeholder="葬儀社名・エリアで検索" oninput="filterCards()" />
+    <select id="feeFilter" onchange="filterCards()">
+      <option value="">タイプ：すべて</option>
+      <option value="無料">登録無料</option>
+      <option value="有料">入会金あり</option>
+      <option value="互助会">積立互助会</option>
+    </select>
+  </div>
+
+  <!-- エリアボタン -->
+  <div class="area-filter" id="areaFilter">
+    <div class="area-group">
+      <span class="area-group-label">すべて</span>
+      <button class="area-btn active" onclick="setArea('',this)">すべて表示</button>
+    </div>
+    <div class="area-group">
+      <span class="area-group-label">静岡県</span>
+      <button class="area-btn" onclick="setArea('浜松',this)">浜松</button>
+      <button class="area-btn" onclick="setArea('磐田',this)">磐田</button>
+      <button class="area-btn" onclick="setArea('袋井',this)">袋井</button>
+      <button class="area-btn" onclick="setArea('掛川',this)">掛川</button>
+      <button class="area-btn" onclick="setArea('湖西',this)">湖西</button>
+      <button class="area-btn" onclick="setArea('静岡',this)">静岡</button>
+      <button class="area-btn" onclick="setArea('富士',this)">富士</button>
+    </div>
+    <div class="area-group">
+      <span class="area-group-label">愛知県</span>
+      <button class="area-btn" onclick="setArea('豊橋',this)">豊橋</button>
+      <button class="area-btn" onclick="setArea('豊川',this)">豊川</button>
+      <button class="area-btn" onclick="setArea('岡崎',this)">岡崎</button>
+      <button class="area-btn" onclick="setArea('西尾',this)">西尾</button>
+      <button class="area-btn" onclick="setArea('安城',this)">安城</button>
+      <button class="area-btn" onclick="setArea('豊田',this)">豊田</button>
+      <button class="area-btn" onclick="setArea('春日井',this)">春日井</button>
+    </div>
+  </div>
+  <div class="compare-bar" id="compareBar">
+    <div class="compare-bar-left">
+      <span style="font-weight:500;color:var(--text-primary)">比較中：</span>
+      <span id="compareChips"></span>
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0">
+      <button class="clear-btn" onclick="clearAll()">全て解除</button>
+      <button class="compare-btn" id="compareBtn" onclick="openModal()">比較する</button>
+    </div>
+  </div>
+
+  <div class="count" id="countLabel"></div>
+  <div class="cards" id="cardList"></div>
+
+  <footer>
+    各社公式サイト・口コミサイト等の公開情報をもとに作成しています。<br>最新の情報は各社の公式ホームページにてご確認ください（2026年6月時点）。
+  </footer>
+</div>
+
+<!-- 比較モーダル -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    <h2>会員制度 比較表</h2>
+    <div class="tbl-wrap">
+      <table class="compare-table" id="compareTable"></table>
+    </div>
+  </div>
+</div>
+
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxOzWhKQTE-0jZpVThfWu58tAJfgKVZm97pqM5iDyKY8P936rtg-CHrTC8JsBADV9iX/exec";
+
+const badgeClass={"無料":"badge-free","有料":"badge-paid","互助会":"badge-gojo"};
+const circleStyle={
+  "無料":{bg:"var(--green-bg)",text:"var(--green-text)"},
+  "有料":{bg:"var(--blue-bg)",text:"var(--blue-text)"},
+  "互助会":{bg:"var(--amber-bg)",text:"var(--amber-text)"}
+};
+
+let selected=new Set();
+
+// スプレッドシートからデータ読み込み（JSONP方式）
+function loadData(){
+  document.getElementById("cardList").innerHTML='<p style="text-align:center;color:var(--text-secondary);padding:2rem">データを読み込み中...</p>';
+  
+  const callbackName = 'jsonpCallback_' + Date.now();
+  
+  window[callbackName] = function(data) {
+    delete window[callbackName];
+    document.getElementById('jsonpScript').remove();
+    data_arr = data;
+    filterCards();
+  };
+  
+  const script = document.createElement('script');
+  script.id = 'jsonpScript';
+  script.onerror = function() {
+    document.getElementById("cardList").innerHTML='<p style="text-align:center;color:#c0392b;padding:2rem">データの読み込みに失敗しました。スプレッドシートの設定を確認してください。</p>';
+  };
+  script.src = SHEET_URL + '?callback=' + callbackName;
+  document.body.appendChild(script);
+}
+
+let data_arr = [];
+
+function scrollToTop(){
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scrollTopBtn');
+  if(!btn) return;
+  if(window.scrollY > 400){ btn.classList.add('show'); }
+  else { btn.classList.remove('show'); }
+});
+
+function jumpToCard(name){
+  const card = document.querySelector(`.card[data-name="${name.replace(/"/g,'\\"')}"]`);
+  if(!card) return;
+  const rect = card.getBoundingClientRect();
+  const targetY = window.scrollY + rect.top - (window.innerHeight/2) + (rect.height/2);
+  window.scrollTo({top: Math.max(targetY,0), behavior:'smooth'});
+  card.classList.add('jump-highlight');
+  setTimeout(()=>card.classList.remove('jump-highlight'), 2000);
+}
+
+function clearAll(){
+  selected.clear();
+  document.querySelectorAll('.card').forEach(card=>{
+    card.classList.remove('selected');
+    const cb=card.querySelector('input[type=checkbox]');
+    if(cb) cb.checked=false;
+  });
+  updateBar();
+}
+
+function toggleSelect(name,cb){
+  if(cb.checked){ selected.add(name); }
+  else { selected.delete(name); }
+  updateCard(name,cb.checked);
+  updateBar();
+}
+
+function updateCard(name,isSelected){
+  document.querySelectorAll('.card').forEach(card=>{
+    if(card.dataset.name===name){
+      card.classList.toggle('selected',isSelected);
+    }
+  });
+}
+
+function updateBar(){
+  const bar=document.getElementById('compareBar');
+  const chips=document.getElementById('compareChips');
+  if(selected.size===0){ bar.classList.remove('show'); return; }
+  bar.classList.add('show');
+  chips.innerHTML=[...selected].map(n=>
+    `<span class="compare-chip">${n}<button onclick="removeSelect('${n.replace(/'/g,"\\'")}')" aria-label="削除">✕</button></span>`
+  ).join('');
+}
+
+function removeSelect(name){
+  selected.delete(name);
+  // チェックボックスも解除
+  document.querySelectorAll('.card').forEach(card=>{
+    if(card.dataset.name===name){
+      const cb=card.querySelector('input[type=checkbox]');
+      if(cb) cb.checked=false;
+      card.classList.remove('selected');
+    }
+  });
+  updateBar();
+}
+
+function openModal(){
+  if(selected.size<2) return;
+  const items=data_arr.filter(d=>selected.has(d.name));
+  const rows=[
+    {label:'タイプ',     key:'feeType', render:d=>`<span class="badge ${badgeClass[d.feeType]}">${d.feeType==='互助会'?'積立式':d.feeType}</span>`},
+    {label:'入会金',     key:'fee',     render:d=>d.fee},
+    {label:'年会費・掛金',key:'annual',  render:d=>d.annual},
+    {label:'対応エリア', key:'area',    render:d=>d.area},
+    {label:'割引・特典', key:'benefits',render:d=>d.benefits},
+    {label:'公式サイト', key:'url',     render:d=>`<a href="${d.url}" target="_blank" rel="noopener" class="site-link" style="margin-top:0"><i class="ti ti-external-link" style="font-size:12px"></i>公式サイト</a>`},
+  ];
+  const thead=`<thead><tr><th style="min-width:80px">項目</th>${items.map(d=>{const c=circleStyle[d.feeType];return`<th><div style="display:flex;align-items:center;gap:8px"><div class="icon-circle" style="background:${c.bg};width:32px;height:32px"><span style="font-size:12px;font-weight:700;color:${c.text}">${d.initial}</span></div><span>${d.name}</span></div></th>`}).join('')}</tr></thead>`;
+  const tbody=`<tbody>${rows.map(r=>`<tr><td>${r.label}</td>${items.map(d=>`<td>${r.render(d)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  document.getElementById('compareTable').innerHTML=thead+tbody;
+  document.getElementById('modalOverlay').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+function closeModalOnBg(e){
+  if(e.target===document.getElementById('modalOverlay')) closeModal();
+}
+
+function renderCards(rows){
+  const list=document.getElementById("cardList");
+  if(rows.length===0){
+    document.getElementById("countLabel").innerHTML='<p class="count-empty">該当する葬儀社が見つかりませんでした。条件を変えてお試しください。</p>';
+  } else {
+    document.getElementById("countLabel").innerHTML=
+      `<div class="count-header"><i class="ti ti-list-check" style="font-size:16px"></i>現在<strong>${rows.length}社</strong>を表示中</div>
+       <div class="count-tags">${rows.map(d=>`<span class="count-tag" onclick="jumpToCard('${d.name.replace(/'/g,"\\'")}')">${d.name}</span>`).join('')}</div>`;
+  }
+  list.innerHTML=rows.map(d=>{
+    const c=circleStyle[d.feeType];
+    const isSelected=selected.has(d.name);
+    return `
+    <div class="card${isSelected?' selected':''}" data-name="${d.name}">
+      <div class="card-head">
+        <div class="name-row">
+          <div class="icon-circle" style="background:${c.bg}">
+            <span style="font-size:15px;font-weight:700;color:${c.text}">${d.initial}</span>
+          </div>
+          <div>
+            <p class="company">${d.name}</p>
+            <p class="note">${d.note}</p>
+          </div>
+        </div>
+        <div class="check-wrap">
+          <input type="checkbox" id="chk_${d.name}" ${isSelected?'checked':''} onchange="toggleSelect('${d.name.replace(/'/g,"\\'")}',this)">
+          <label for="chk_${d.name}">比較に追加</label>
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="stat"><span class="stat-label">タイプ</span><span class="badge ${badgeClass[d.feeType]}">${d.feeType==='互助会'?'積立式':d.feeType}</span></div>
+        <div class="stat"><span class="stat-label">入会金</span><span class="stat-value">${d.fee}</span></div>
+        <div class="stat"><span class="stat-label">年会費・掛金</span><span class="stat-value">${d.annual}</span></div>
+      </div>
+      <div class="area-row"><i class="ti ti-map-pin" style="font-size:13px"></i>${d.area}</div>
+      <div class="benefits">
+        <span class="benefits-label"><i class="ti ti-gift" style="font-size:13px"></i>割引・特典内容</span>
+        <ul class="benefits-list">${d.benefits.split('、').map(b=>`<li>${b.trim()}</li>`).join('')}</ul>
+        <div><a href="${d.url}" target="_blank" rel="noopener" class="site-link"><i class="ti ti-external-link" style="font-size:13px"></i>公式サイトを見る</a></div>
+      </div>
+    </div>
+  `}).join("");
+}
+
+let currentArea='';
+
+function setArea(area,btn){
+  currentArea=area;
+  document.querySelectorAll('.area-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
+}
+
+function filterCards(){
+  const q=document.getElementById("searchInput").value.toLowerCase();
+  const f=document.getElementById("feeFilter").value;
+  const filtered=data_arr.filter(d=>{
+    const searchText=(d.name+d.area+d.benefits+(d.halls||"")).toLowerCase();
+    const matchQ=!q||searchText.includes(q);
+    const matchF=!f||d.feeType===f;
+    const matchA=!currentArea||(d.halls||"").split(" ").includes(currentArea+"市");
+    return matchQ&&matchF&&matchA;
+  });
+  renderCards(filtered);
+}
+
+loadData();
+</script>
+<button id="scrollTopBtn" class="scroll-top-btn" onclick="scrollToTop()" aria-label="上に戻る">
+  <i class="ti ti-arrow-up" style="font-size:22px"></i>
+</button>
+</body>
+</html>
