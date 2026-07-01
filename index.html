@@ -39,7 +39,7 @@
   .header-mark{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:1.25rem}
   .header-mark .line{height:1px;width:36px;background:var(--accent)}
   .header-mark i{font-size:20px;color:var(--accent)}
-  h1{font-family:"Noto Serif JP",serif;font-size:30px;font-weight:600;margin:0 0 10px;text-align:center;letter-spacing:0.03em}
+  h1{font-family:"Zen Maru Gothic",sans-serif;font-size:38px;font-weight:700;margin:0 0 10px;text-align:center;letter-spacing:0.05em}
   .subtitle{font-size:16px;color:var(--text-secondary);margin:0 0 2rem;text-align:center;line-height:1.8}
   .toolbar{display:flex;gap:10px;margin-bottom:1.25rem;flex-wrap:wrap;background:var(--bg-card);padding:10px;border-radius:var(--radius-lg);border:1px solid var(--border)}
   .toolbar input,.toolbar select{height:44px;border:1px solid var(--border);border-radius:var(--radius-md);padding:0 14px;font-size:16px;background:#fff;color:var(--text-primary);font-family:inherit}
@@ -160,10 +160,10 @@
   .compare-table th{background:var(--bg-secondary);padding:12px 14px;text-align:left;font-size:13px;font-weight:700;color:var(--text-primary);border:1px solid var(--border);white-space:nowrap}
   .compare-table td{padding:12px 14px;border:1px solid var(--border);vertical-align:top;line-height:1.7}
   .compare-table tbody tr:nth-child(even) td{background:#f0f6ee}
-  .compare-table tbody tr:hover td{background:var(--accent-light)}
+  .compare-table tbody tr:hover td{background:#fffde7}
   .compare-table td:first-child{font-weight:600;color:var(--text-secondary);font-size:13px;white-space:nowrap;background:var(--bg-secondary);min-width:90px}
   .compare-table tbody tr:nth-child(even) td:first-child{background:#deebd8}
-  .compare-table tbody tr:hover td:first-child{background:var(--accent-light)}
+  .compare-table tbody tr:hover td:first-child{background:#fff9c4}
   .tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-md)}
   footer{font-size:12px;color:var(--text-tertiary);margin-top:2rem;line-height:1.8;text-align:center;padding-top:1.5rem;border-top:1px solid var(--border)}
   /* エリアボタン */
@@ -185,7 +185,7 @@
   @media(max-width:480px){.grid-row{grid-template-columns:1fr 1fr}}
   @media(max-width:600px){
     .page{padding:2rem 1rem}
-    h1{font-size:24px}
+    h1{font-size:28px}
     .subtitle{font-size:15px;margin-bottom:1.5rem}
     .toolbar{flex-direction:column}
     .toolbar select{width:100%}
@@ -199,11 +199,11 @@
 
   /* 上に戻るボタン */
   .scroll-top-btn{
-    position:fixed;bottom:24px;right:24px;z-index:150;
-    padding:10px 18px;border-radius:999px;
+    position:fixed;bottom:24px;right:calc((100vw - 1200px)/2 + 8px);z-index:150;
+    width:64px;height:64px;border-radius:50%;
     background:var(--accent);color:#fff;border:none;
-    display:flex;align-items:center;gap:6px;
-    font-size:14px;font-weight:700;font-family:inherit;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    font-size:13px;font-weight:700;font-family:inherit;
     cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.2);
     opacity:0;visibility:hidden;transform:translateY(10px);
     transition:opacity 0.2s,visibility 0.2s,transform 0.2s;
@@ -211,7 +211,10 @@
   .scroll-top-btn.show{opacity:1;visibility:visible;transform:translateY(0)}
   .scroll-top-btn:hover{opacity:0.85}
   @media(max-width:600px){
-    .scroll-top-btn{padding:8px 14px;font-size:13px;bottom:16px;right:16px}
+    .scroll-top-btn{width:56px;height:56px;font-size:12px;bottom:16px;right:16px}
+  }
+  @media(max-width:1280px){
+    .scroll-top-btn{right:16px}
   }
 </style>
 </head>
@@ -219,13 +222,12 @@
 <div class="page">
   <div class="header-mark"><span class="line"></span><i class="ti ti-flower" aria-hidden="true"></i><span class="line"></span></div>
   <h1>葬儀社 会員制度比較</h1>
-  <p class="subtitle">大切な方とのお別れに、後悔のない選択を。<br>静岡県の葬儀社10社の会員制度をまとめました。</p>
 
   <div class="toolbar">
     <input type="text" id="searchInput" placeholder="葬儀社名・エリアで検索" oninput="filterCards()" />
     <select id="feeFilter" onchange="filterCards()">
       <option value="">タイプ：すべて</option>
-      <option value="無料">登録無料</option>
+      <option value="無料">入会金なし</option>
       <option value="有料">入会金あり</option>
       <option value="互助会">積立互助会</option>
     </select>
@@ -458,7 +460,10 @@ function renderCards(rows){
       <div class="benefits">
         <span class="benefits-label"><i class="ti ti-gift" style="font-size:13px"></i>割引・特典内容</span>
         <ul class="benefits-list">${d.benefits.split('、').map(b=>`<li>${b.trim()}</li>`).join('')}</ul>
-        <div><a href="${d.url}" target="_blank" rel="noopener" class="site-link"><i class="ti ti-external-link" style="font-size:13px"></i>公式サイトを見る</a></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <a href="${d.url}" target="_blank" rel="noopener" class="site-link"><i class="ti ti-external-link" style="font-size:13px"></i>${d.url2?'パルモ葬祭公式サイト':'公式サイトを見る'}</a>
+          ${d.url2?`<a href="${d.url2}" target="_blank" rel="noopener" class="site-link"><i class="ti ti-external-link" style="font-size:13px"></i>イズモホール 公式サイト</a>`:''}
+        </div>
       </div>
     </div>
   `}).join("");
