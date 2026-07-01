@@ -200,9 +200,10 @@
   /* 上に戻るボタン */
   .scroll-top-btn{
     position:fixed;bottom:24px;right:24px;z-index:150;
-    width:48px;height:48px;border-radius:50%;
+    padding:10px 18px;border-radius:999px;
     background:var(--accent);color:#fff;border:none;
-    display:flex;align-items:center;justify-content:center;
+    display:flex;align-items:center;gap:6px;
+    font-size:14px;font-weight:700;font-family:inherit;
     cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.2);
     opacity:0;visibility:hidden;transform:translateY(10px);
     transition:opacity 0.2s,visibility 0.2s,transform 0.2s;
@@ -210,7 +211,7 @@
   .scroll-top-btn.show{opacity:1;visibility:visible;transform:translateY(0)}
   .scroll-top-btn:hover{opacity:0.85}
   @media(max-width:600px){
-    .scroll-top-btn{width:44px;height:44px;bottom:16px;right:16px}
+    .scroll-top-btn{padding:8px 14px;font-size:13px;bottom:16px;right:16px}
   }
 </style>
 </head>
@@ -488,7 +489,7 @@ function filterCards(){
 loadData();
 </script>
 <button id="scrollTopBtn" class="scroll-top-btn" onclick="scrollToTop()" aria-label="上に戻る">
-  <i class="ti ti-arrow-up" style="font-size:22px"></i>
+  <i class="ti ti-arrow-up" style="font-size:18px"></i>TOP
 </button>
 </body>
 </html>
